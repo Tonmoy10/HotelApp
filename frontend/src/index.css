@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="email"], input[type="password"], input[type="text"], .phone {
+    @apply w-full px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100
+}
+
+.logEmail {
+    @apply w-full px-3 py-2 border shadow-md rounded-t-lg my-3
+}
+.logPass {
+    @apply w-full px-3 py-2 border shadow-md rounded-b-lg mt-2
+}
+.sub {
+    @apply bg-red-400 border w-full shadow-md rounded-lg my-3 py-2 text-white
+}

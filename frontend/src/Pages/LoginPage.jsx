@@ -14,6 +14,10 @@ export default function LoginPage() {
         e.preventDefault()
         try {
             const userInfo = await axios.post("/login", {email, pass});
+            if ( typeof userInfo.data == 'string') {
+                alert("Failed to log in due to incorrect information!")
+                return <Navigate to = {'/login'} />
+            }
             setUser(userInfo) // SETTING THE USER VALUE FOR USER CONTEXT
             // setFlag(true)
             setRedirect(true)
@@ -45,3 +49,4 @@ export default function LoginPage() {
         </div>
     );
 }
+

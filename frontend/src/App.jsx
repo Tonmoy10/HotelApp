@@ -21,6 +21,7 @@ function App() {
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<RegistrationPage/>} />
           <Route path='/account/:branch?' element={<AccountPage/>} />
+          <Route path='/account/:branch/:option' element={<AccountPage/>} />
         </Route> 
       </Routes>
     </UserContextProvider>   

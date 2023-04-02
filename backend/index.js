@@ -66,13 +66,13 @@ app.post('/login', async (req, res) => {
                     // res.json("ok")
                 })
             }
-        else {
-            res.json("Incorrect Password")
+            else {
+                res.json("Incorrect Password")
+            }
         }
-    }
-    else {
-        res.json("User not found")
-    }
+        else {
+            res.json("User not found")
+        }
     } catch (error) {
         res.json("Error hosie bhai")
     }

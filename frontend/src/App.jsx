@@ -6,7 +6,7 @@ import Account from './Pages/Account';
 import IndexPage from './Pages/IndexPage'
 import LoginPage from './Pages/LoginPage';
 import RegistrationPage from './Pages/RegistrationPage';
-import { UserContextProvider } from './userContext';
+import { UserContextProvider } from './UserContext';
 
 axios.defaults.baseURL='http://localhost:4000';
 axios.defaults.withCredentials = true ;

@@ -1,29 +1,29 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { userContext } from "../userContext";
+import { UserContext } from "../UserContext";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [pass, setPass] = useState('')
-    const {user, setUser} = useContext(userContext)
+    const {user, setUser} = useContext(UserContext)
     const [redirect, setRedirect] = useState(false)
-    const [flag, setFlag] = useState(false)
+    // const [flag, setFlag] = useState(false)
 
     async function handleSubmit(e) {
         e.preventDefault()
         try {
             const userInfo = await axios.post("/login", {email, pass});
             setUser(userInfo) // SETTING THE USER VALUE FOR USER CONTEXT
-            setFlag(true)
-            setRedirect(true)
+            // setFlag(true)
+            // setRedirect(true)
         } catch (error) {
             alert(`Error while logging in! \n${error}`)
         }   
     }
-    if (redirect) {
+    /* if (redirect) {
         return <Navigate to = {'/account'}/>
-    }
+    } */
     return (
         <div className="flex justify-center h-min items-center">
             <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>

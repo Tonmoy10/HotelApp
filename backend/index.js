@@ -41,26 +41,30 @@ app.post('/register', async (req, res) => {
     } catch (error) {
         res.status(406).json(error)
     }
-    
+
 }) //CREATING A NEW USER USING USER MODEL
 
 app.post('/login', async (req, res) => {
     const {email, pass} = req.body
     try {
-    const user = await UserModel.findOne({email})
-    if (user) {
-        const checkPass = bcrypt.compareSync(pass, user.pass)
-        console.log(checkPass)
-        if (checkPass) {
-            //webToken.sign({email: user.email, id: user._id, name: user.name},tokenSalt, {},(err, token) => {  //SET UP COOKIE
-            webToken.sign({data: {email: user.email, id: user._id, name: user.name}},tokenSalt,{},(err,token) => { //SET UP COOKIE
-                if(err) {
-                    throw err
-                }
-                res.cookie('token',token).json(user)
-                // res.json("ok")
-            })
-        }
+        const user = await UserModel.findOne({email})
+        if (user) {
+            console.log("log1")
+            const checkPass = bcrypt.compareSync(pass, user.pass)
+            console.log(checkPass)
+            if (checkPass) {
+                console.log("log2")
+                webToken.sign({email: user.email, id: user._id, name: user.name},tokenSalt, {},(err, token) => {  //SET UP COOKIE
+                //webToken.sign({data: {email: user.email, id: user._id, name: user.name}},tokenSalt,{},(err,token) => { //SET UP COOKIE
+                    if(err) {
+                        console.log("log3")
+                        throw err
+                    }
+                    console.log("log4")
+                    res.cookie('token',token).json(user)
+                    // res.json("ok")
+                })
+            }
         else {
             res.json("Incorrect Password")
         }
@@ -69,21 +73,26 @@ app.post('/login', async (req, res) => {
         res.json("User not found")
     }
     } catch (error) {
-        res.json(error)
+        res.json("Error hosie bhai")
     }
+    
 })
 
 app.get('/user', (req,res) => {
     const {token} = req.cookies
     if(token) {
+        console.log("1")
         webToken.verify(token, tokenSalt, {}, (err, data) => {
             if(err) {
+                console.log("2")
                 throw err
             } else {
+                console.log("3")
                 res.json(data)
             }
         })
     } else {
+        console.log("\n4")
         res.json(null)
     }
     // res.json({token})

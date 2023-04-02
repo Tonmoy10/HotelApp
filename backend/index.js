@@ -54,8 +54,9 @@ app.post('/login', async (req, res) => {
             console.log(checkPass)
             if (checkPass) {
                 console.log("log2")
-                webToken.sign({email: user.email, id: user._id, name: user.name},tokenSalt, {},(err, token) => {  //SET UP COOKIE
+                //webToken.sign({email: user.email, id: user._id, name: user.name},tokenSalt, {},(err, token) => {  //SET UP COOKIE
                 //webToken.sign({data: {email: user.email, id: user._id, name: user.name}},tokenSalt,{},(err,token) => { //SET UP COOKIE
+                webToken.sign({data: {email: user.email, id: user._id, name: user.name}},tokenSalt,{},(err,token) => { //SET UP COOKIE
                     if(err) {
                         console.log("log3")
                         throw err
@@ -100,6 +101,10 @@ app.get('/user', (req,res) => {
 
 app.get('/account', (req, res) => {
     res.json("account page")
+})
+
+app.post('/logout', (req, res) => {
+    res.cookie('token', '').json(true)
 })
 
 app.listen(4000)

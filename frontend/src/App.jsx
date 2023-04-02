@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Layout from './assets/Layout';
-import Account from './Pages/Account';
+import AccountPage from './Pages/AccountPage';
 import IndexPage from './Pages/IndexPage'
 import LoginPage from './Pages/LoginPage';
 import RegistrationPage from './Pages/RegistrationPage';
@@ -20,7 +20,7 @@ function App() {
           <Route path='/index' element={<IndexPage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<RegistrationPage/>} />
-          <Route path='/account' element={<Account/>} />
+          <Route path='/account/:branch?' element={<AccountPage/>} />
         </Route> 
       </Routes>
     </UserContextProvider>   

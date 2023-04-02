@@ -16,14 +16,14 @@ export default function LoginPage() {
             const userInfo = await axios.post("/login", {email, pass});
             setUser(userInfo) // SETTING THE USER VALUE FOR USER CONTEXT
             // setFlag(true)
-            // setRedirect(true)
+            setRedirect(true)
         } catch (error) {
             alert(`Error while logging in! \n${error}`)
         }   
     }
-    /* if (redirect) {
+    if (redirect) {
         return <Navigate to = {'/account'}/>
-    } */
+    }
     return (
         <div className="flex justify-center h-min items-center">
             <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>

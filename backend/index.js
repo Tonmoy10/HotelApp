@@ -20,7 +20,7 @@ app.use(cors({
     }
 )) // TO AVOID CORS ERROR FOR MULTI ORIGIN
 
-mongoose.connect(process.env.MongoURL) //CONNECTION TO DB
+mongoose.connect(process.env.MongoUrl) //CONNECTION TO DB
 
 
 app.get('/test', (req, res) => {

@@ -51,7 +51,6 @@ app.post('/login', async (req, res) => {
         if (user) {
             console.log("log1")
             const checkPass = bcrypt.compareSync(pass, user.pass)
-            console.log(checkPass)
             if (checkPass) {
                 console.log("log2")
                 //webToken.sign({email: user.email, id: user._id, name: user.name},tokenSalt, {},(err, token) => {  //SET UP COOKIE
@@ -61,19 +60,21 @@ app.post('/login', async (req, res) => {
                         console.log("log3")
                         throw err
                     }
-                    console.log("log4")
+                    console.log("log10")
                     res.cookie('token',token).json(user)
-                    // res.json("ok")
                 })
             }
             else {
+                console.log("log4")
                 res.json("Incorrect Password")
             }
         }
         else {
+            console.log("log5")
             res.json("User not found")
         }
     } catch (error) {
+        console.log("log6")
         res.json("Error hosie bhai")
     }
     
@@ -96,7 +97,6 @@ app.get('/user', (req,res) => {
         console.log("\n4")
         res.json(null)
     }
-    // res.json({token})
 })
 
 app.get('/account', (req, res) => {

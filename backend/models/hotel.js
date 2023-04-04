@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 
-const locationSchema = Schema({
+const hotelSchema = Schema({
     title: String,
     address: String,
     photos: [String],
@@ -14,6 +14,6 @@ const locationSchema = Schema({
     owner: {type:mongoose.Schema.Types.ObjectId, ref:'user'} //TO FILL IN THE NAME AUTOMATICALLY
 });
 
-const locationModel = mongoose.model('location', locationSchema);
+const hotelModel = mongoose.model('hotel', hotelSchema);
 
-module.export = locationModel;
+module.export = hotelModel;

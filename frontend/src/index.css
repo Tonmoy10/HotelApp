@@ -15,3 +15,7 @@ input[type="email"], input[type="password"], input[type="text"], .phone {
 .sub {
     @apply bg-red-400 border w-full shadow-md rounded-lg my-3 py-2 text-white
 }
+
+textarea {
+    @apply w-full px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100
+}

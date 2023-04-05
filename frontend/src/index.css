@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type="email"], input[type="password"], input[type="text"], .phone {
-    @apply w-full px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100
+input[type="email"], input[type="password"], input[type="text"], input[type="number"], .phone {
+    @apply w-full px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100 
 }
 
 .logEmail {

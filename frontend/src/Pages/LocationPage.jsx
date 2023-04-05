@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Link, useParams } from "react-router-dom";
 import Features from "../features";
+import axios from "axios";
 
 export default function LocationPage() {
     let {option} = useParams();
@@ -9,11 +10,20 @@ export default function LocationPage() {
     const [description, setDescription] = useState('')
     const [info, setInfo] = useState('')
     const [features, setFeatures] = useState([])
-    const [images, setImages] = useState([])
+    const [imagesUploaded, setImagesUploaded] = useState([])
     const [linkImage, setLinkImage] = useState([])
     const [checkin, setCheckin] = useState('')
     const [checkout, setCheckout] = useState('')
     const [people, setPeople] = useState(1)
+
+    async function uploadImageLink(e) {
+        e.preventDefault()
+        const {data:filename} = await axios.post('/linkupload', {link: linkImage});
+        setImagesUploaded(prev => {
+            return [...prev, filename];
+        });
+        setLinkImage('');
+    }
 
     return (
         <div>
@@ -56,17 +66,22 @@ export default function LocationPage() {
                         <p className="font-bold text-lg mt-2 text-center">Images</p>
                         <fieldset className="border p-4 rounded-lg">
                             <div className="flex justify-between">
-                                <input className="sub" type="text" name="link" placeholder="Upload Images Using Link. Format:jpeg" 
+                                <input type="text" name="link" placeholder="Upload Images Using Link. Format:jpeg" 
                                 value={linkImage} onChange={e => setLinkImage(e.target.value)} />
-                                <button className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 font-bold bg-slate-100">ADD</button>
+                                <button onClick={uploadImageLink} className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 font-bold bg-slate-100" >ADD</button>
                             </div>
                             <div className="flex bg-transparent">
                                 <button className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
-                                    <div className="font-bold">Upload Images From Your Device</div>
+                                    <div className="font-bold">Device</div>
                                 </button>
+                                {imagesUploaded.length > 0 && imagesUploaded.map((link) => (
+                                    <div key={link.filename}>
+                                        {link}
+                                    </div>
+                                ))}
                             </div>
                         </fieldset>
 
@@ -83,17 +98,13 @@ export default function LocationPage() {
                                 </div>
                                 <div>
                                     <p>Guests</p>
-                                    <input type="text" name="people" placeholder="Eg. 2" value={people} onChange={e => setPeople(e.target.value)}/>
+                                    <input type="number" name="people" placeholder="Eg. 2" value={people} onChange={e => setPeople(e.target.value)}/>
                                 </div>
                             </div>
 
                         </fieldset>
 
                         <button className="sub">Register</button>
-                    
-
-                    
-
                     </form>
                 </div>
             )}

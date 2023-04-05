@@ -4,12 +4,14 @@ const bcrypt = require("bcryptjs")
 const webToken = require("jsonwebtoken")
 const { default: mongoose } = require('mongoose')
 const cookieParser = require("cookie-parser")
+const download = require("image-downloader")
 const UserModel = require('./models/user')
 const app = express()
 require('dotenv').config()
 
 app.use(express.json())
 app.use(cookieParser()) //to read cookies
+app.use('/uploads', express.static(__dirname+'/uploads'));
 
 const secretSalt = bcrypt.genSaltSync(8)  //FOR PASSWORD HASHING
 const tokenSalt = 'jsdnfjdsnfnsoadnflsadn' //RANDOM STRING FOR TOKEN GENERATION
@@ -105,6 +107,17 @@ app.get('/account', (req, res) => {
 
 app.post('/logout', (req, res) => {
     res.cookie('token', '').json(true)
+})
+
+console.log({__dirname})
+app.post('/linkupload', async (req, res) => {
+    const {link} = req.body
+    const name = 'photo' + Date.now() + ".jpg"
+    await download.image({
+        url: link,
+        dest: `E:/Job/Mern Stack/Internship/backend/uploads/${name}`,
+    });
+    res.json(name)
 })
 
 app.listen(4000)

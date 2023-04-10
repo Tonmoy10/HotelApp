@@ -25,6 +25,23 @@ export default function LocationPage() {
         setLinkImage('');
     }
 
+        function uploadLocalImage(e) {
+        // e.preventDefault()
+        const files = e.target.files
+        const data = new FormData()
+        for (let i = 0; i < files.length; i++) {
+            data.append('images', files[i])
+        }
+        axios.post('/localupload', data, {
+            headers: {"Content-Type":"multipart/form-data"}
+        }).then(response => {
+            const {data:filenames} = response
+            setImagesUploaded(prev => {
+                return [...prev, ...filenames];
+            });
+        })
+    }
+
     return (
         <div>
             {option !== 'new' && (
@@ -64,21 +81,22 @@ export default function LocationPage() {
                         </fieldset>
 
                         <p className="font-bold text-lg mt-2 text-center">Images</p>
-                        <fieldset className="border p-4 rounded-lg">
+                        <fieldset className="border p-4 rounded-lg max-w-2xl max-h-screen">
                             <div className="flex justify-between">
                                 <input type="text" name="link" placeholder="Upload Images Using Link. Format:jpeg" 
                                 value={linkImage} onChange={e => setLinkImage(e.target.value)} />
                                 <button onClick={uploadImageLink} className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 font-bold bg-slate-100" >ADD</button>
                             </div>
                             <div className="flex bg-transparent">
-                                <button className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100">
+                                <label className=" cursor-pointer flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100">
+                                    <input type="file" multiple className="hidden" onChange={uploadLocalImage} />
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                     <div className="font-bold">Device</div>
-                                </button>
+                                </label>
                                 {imagesUploaded.length > 0 && imagesUploaded.map((link) => (
-                                    <div key={link.filename}>
+                                    <div key={link.filename} className="m-2 p-1">
                                         {link}
                                     </div>
                                 ))}

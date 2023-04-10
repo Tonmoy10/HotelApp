@@ -4,9 +4,11 @@ const bcrypt = require("bcryptjs")
 const webToken = require("jsonwebtoken")
 const { default: mongoose } = require('mongoose')
 const cookieParser = require("cookie-parser")
+const multer = require("multer")
 const download = require("image-downloader")
 const UserModel = require('./models/user')
 const app = express()
+const fs = require("fs")
 require('dotenv').config()
 
 app.use(express.json())
@@ -109,15 +111,29 @@ app.post('/logout', (req, res) => {
     res.cookie('token', '').json(true)
 })
 
-console.log({__dirname})
 app.post('/linkupload', async (req, res) => {
     const {link} = req.body
     const name = 'photo' + Date.now() + ".jpg"
     await download.image({
         url: link,
         dest: `E:/Job/Mern Stack/Internship/backend/uploads/${name}`,
+        // dest: {__dirname} + "/uploads" + name,
     });
     res.json(name)
+})
+
+const photoMiddleware = multer({dest:'uploads/'});
+app.post('/localupload', photoMiddleware.array("images", 100), (req, res) => {
+    const uploadFiles = []
+    for (let i = 0; i < req.files.length; i++) {
+        const {path, originalname} = req.files[i]
+        const parts = originalname.split('.')
+        const extension = parts[parts.length-1]
+        const newPath = path + '.' + extension
+        fs.renameSync(path, newPath)
+        uploadFiles.push(newPath.replace('uploads/', ''));
+    }
+    res.json(uploadFiles)
 })
 
 app.listen(4000)

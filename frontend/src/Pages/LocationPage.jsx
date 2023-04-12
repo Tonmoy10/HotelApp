@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Form, Link, useParams } from "react-router-dom";
+import { Form, Link, Navigate, useParams } from "react-router-dom";
 import Features from "../features";
 import axios from "axios";
+import { ImageUpload } from "../ImageUpload";
 
 export default function LocationPage() {
     let {option} = useParams();
@@ -11,35 +12,28 @@ export default function LocationPage() {
     const [info, setInfo] = useState('')
     const [features, setFeatures] = useState([])
     const [imagesUploaded, setImagesUploaded] = useState([])
-    const [linkImage, setLinkImage] = useState([])
     const [checkin, setCheckin] = useState('')
     const [checkout, setCheckout] = useState('')
     const [people, setPeople] = useState(1)
+    // let [redirect, setRedirect] = useState(false)
+    const [redirect, setRedirect] = useState(false)
 
-    async function uploadImageLink(e) {
+    async function addHotel(e) {
         e.preventDefault()
-        const {data:filename} = await axios.post('/linkupload', {link: linkImage});
-        setImagesUploaded(prev => {
-            return [...prev, filename];
-        });
-        setLinkImage('');
+        try {
+            await axios.post('/hotel', {title, address, description, info, 
+                features, imagesUploaded, checkin, checkout, people});
+            alert("Hotel added successfully!")
+            setRedirect(true)
+            // setRedirect('/account/accommodation')
+        } catch (error) {
+            alert("Sorry, could not add your hotel!")
+        } 
     }
-
-        function uploadLocalImage(e) {
-        // e.preventDefault()
-        const files = e.target.files
-        const data = new FormData()
-        for (let i = 0; i < files.length; i++) {
-            data.append('images', files[i])
-        }
-        axios.post('/localupload', data, {
-            headers: {"Content-Type":"multipart/form-data"}
-        }).then(response => {
-            const {data:filenames} = response
-            setImagesUploaded(prev => {
-                return [...prev, ...filenames];
-            });
-        })
+    
+    if (redirect && option == "new") {
+        // redirect = false;
+        return <Navigate to = {'/account/accommodation'} />
     }
 
     return (
@@ -59,7 +53,7 @@ export default function LocationPage() {
 
             {option === 'new' && (
                 <div className="flex justify-center h-min mt-10 items-center">
-                    <form className="max-w-2xl mx-auto">
+                    <form className="max-w-2xl mx-auto" onSubmit={addHotel}>
                         <p className="font-bold text-lg text-center">General Information</p>
                         <fieldset className="border p-4 rounded-lg">
                             <input type="text" name="title" placeholder="Hotel Name" 
@@ -82,25 +76,7 @@ export default function LocationPage() {
 
                         <p className="font-bold text-lg mt-2 text-center">Images</p>
                         <fieldset className="border p-4 rounded-lg max-w-2xl max-h-screen">
-                            <div className="flex justify-between">
-                                <input type="text" name="link" placeholder="Upload Images Using Link. Format:jpeg" 
-                                value={linkImage} onChange={e => setLinkImage(e.target.value)} />
-                                <button onClick={uploadImageLink} className="flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 font-bold bg-slate-100" >ADD</button>
-                            </div>
-                            <div className="flex bg-transparent">
-                                <label className=" cursor-pointer flex max-w-fit px-3 py-2 border shadow-md rounded-lg my-2 bg-slate-100">
-                                    <input type="file" multiple className="hidden" onChange={uploadLocalImage} />
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                    <div className="font-bold">Device</div>
-                                </label>
-                                {imagesUploaded.length > 0 && imagesUploaded.map((link) => (
-                                    <div key={link.filename} className="m-2 p-1">
-                                        {link}
-                                    </div>
-                                ))}
-                            </div>
+                            <ImageUpload imagesUploaded={imagesUploaded} onChange={setImagesUploaded}/>
                         </fieldset>
 
                         <p className="font-bold text-lg mt-2 text-center">Hotel Timing</p>

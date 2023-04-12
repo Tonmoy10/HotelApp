@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser")
 const multer = require("multer")
 const download = require("image-downloader")
 const UserModel = require('./models/user')
+const HotelModel = require('./models/hotel')
 const app = express()
 const fs = require("fs")
 require('dotenv').config()
@@ -134,6 +135,32 @@ app.post('/localupload', photoMiddleware.array("images", 100), (req, res) => {
         uploadFiles.push(newPath.replace('uploads/', ''));
     }
     res.json(uploadFiles)
+})
+
+app.post('/hotel' , (req, res) => {
+    const {title, address, description, imagesUploaded, info, features, checkin, checkout, people} = req.body
+    const {token} = req.cookies
+    if(token) {
+        webToken.verify(token, tokenSalt, {}, async (err, data) => {
+            if(err) {
+                throw err
+            } else {
+                const newHotel = await HotelModel.create({
+                    owner: data.id,
+                    title: title,
+                    address: address,
+                    photos: imagesUploaded,
+                    features: features,
+                    description: description,
+                    extraInfo: info,
+                    checkin: checkin,
+                    checkout: checkout,
+                    max:people
+                })
+                res.json(newHotel)
+            }
+        })
+    }
 })
 
 app.listen(4000)
